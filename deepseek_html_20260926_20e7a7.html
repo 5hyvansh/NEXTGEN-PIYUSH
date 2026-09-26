@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>NEXTGEN PIYUSH · Thumbnail Designer</title>
+  <!-- Font & Icons (Font Awesome for clean, professional icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Font for modern typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+  <style>
+    /* ----- CSS VARIABLES ----- */
+    :root {
+      --bg-deep: #05070c;
+      --bg-primary: #0a0f1a;
+      --bg-card: #0f1624;
+      --electric-blue: #1e90ff;
+      --electric-glow: #3a9eff;
+      --bright-blue: #007bff;
+      --border-dim: rgba(30, 144, 255, 0.18);
+      --border-glow: rgba(30, 144, 255, 0.45);
+      --text-primary: #f0f4fc;
+      --text-secondary: #a0b3d9;
+      --text-muted: #6c7ea0;
+      --glow-shadow: 0 0 20px rgba(30, 144, 255, 0.25);
+      --card-radius: 20px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      background-image: radial-gradient(circle at 20% 30%, rgba(30, 144, 255, 0.05) 0%, transparent 30%),
+                        radial-gradient(circle at 80% 70%, rgba(30, 144, 255, 0.06) 0%, transparent 35%);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ----- UTILITIES ----- */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 0%, #b0d0ff 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      max-width: 620px;
+      font-weight: 400;
+    }
+
+    /* ----- NAVIGATION ----- */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(5, 7, 12, 0.75);
+      border-bottom: 1px solid var(--border-dim);
+      transition: var(--transition);
+      padding: 14px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff, #9ac8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--electric-blue);
+      box-shadow: 0 0 8px var(--electric-blue);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1.75rem;
+      cursor: pointer;
+    }
+
+    /* Mobile menu */
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        height: 100vh;
+        width: 70%;
+        max-width: 300px;
+        background: rgba(8, 12, 20, 0.97);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: center;
+        gap: 2.5rem;
+        transition: right 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+        border-left: 1px solid var(--border-dim);
+        padding: 2rem;
+      }
+
+      .nav-links.active {
+        right: 0;
+      }
+
+      .hamburger {
+        display: block;
+        z-index: 110;
+      }
+
+      .nav-links a {
+        font-size: 1.3rem;
+      }
+    }
+
+    /* ----- HERO SECTION ----- */
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: 100px 0 80px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(30, 144, 255, 0.15) 0%, transparent 70%);
+      top: -150px;
+      right: -150px;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      animation: floatGlow 8s infinite alternate ease-in-out;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 123, 255, 0.1) 0%, transparent 70%);
+      bottom: -150px;
+      left: -100px;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      animation: floatGlow 10s infinite alternate-reverse ease-in-out;
+    }
+
+    @keyframes floatGlow {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+      100% { transform: translate(30px, -30px) scale(1.15); opacity: 1; }
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .hero-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 1px solid var(--border-dim);
+      box-shadow: 0 0 20px rgba(30, 144, 255, 0.25);
+      background: #0a0f1a;
+    }
+
+    .hero-logo-label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      color: var(--electric-blue);
+      text-transform: uppercase;
+    }
+
+    .hero-headline {
+      font-size: clamp(2.8rem, 7vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #ffffff 0%, #b8d4ff 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-headline span {
+      background: linear-gradient(135deg, var(--electric-blue), #7bb9ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 30px rgba(30, 144, 255, 0.4);
+    }
+
+    .hero-desc {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-bottom: 38px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 36px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1e90ff, #0070e0);
+      color: white;
+      box-shadow: 0 8px 28px rgba(30, 144, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #3a9eff, #1a80e0);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 34px rgba(30, 144, 255, 0.45);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid rgba(30, 144, 255, 0.5);
+      color: #ffffff;
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--electric-blue);
+      background: rgba(30, 144, 255, 0.08);
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(30, 144, 255, 0.2);
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-logo-large {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 32px;
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 25px 50px -8px rgba(0, 0, 0, 0.8), 0 0 40px rgba(30, 144, 255, 0.25);
+      transition: var(--transition);
+      background: #0f1624;
+    }
+
+    .hero-logo-large:hover {
+      transform: scale(1.02);
+      box-shadow: 0 30px 60px -10px rgba(0, 0, 0, 0.9), 0 0 60px rgba(30, 144, 255, 0.35);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+      }
+
+      .hero-content {
+        align-items: center;
+      }
+
+      .hero-logo-wrapper {
+        justify-content: center;
+      }
+
+      .hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-ctas {
+        justify-content: center;
+      }
+
+      .hero-logo-large {
+        max-width: 280px;
+      }
+    }
+
+    /* ----- PORTFOLIO SECTION ----- */
+    .portfolio {
+      padding: 100px 0 120px;
+      background: linear-gradient(180deg, var(--bg-deep) 0%, #070b12 100%);
+      position: relative;
+      content-visibility: auto;
+    }
+
+    .portfolio-header {
+      margin-bottom: 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (min-width: 1200px) {
+      .gallery-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) and (min-width: 601px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    .thumb-card {
+      background: var(--bg-card);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      border: 1px solid var(--border-dim);
+      box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.6);
+      transition: var(--transition);
+      cursor: pointer;
+      aspect-ratio: 16 / 9;
+      position: relative;
+    }
+
+    .thumb-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    .thumb-card:hover {
+      border-color: var(--border-glow);
+      box-shadow: 0 0 0 1px rgba(30, 144, 255, 0.4), 0 20px 36px -10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(30, 144, 255, 0.3);
+      transform: translateY(-6px) scale(1.01);
+    }
+
+    .thumb-card:hover img {
+      transform: scale(1.06);
+    }
+
+    /* subtle overlay on hover */
+    .thumb-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(30, 144, 255, 0.15), transparent 80%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .thumb-card:hover::after {
+      opacity: 1;
+    }
+
+    /* ----- LIGHTBOX ----- */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s;
+      padding: 20px;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-img {
+      max-width: 90vw;
+      max-height: 85vh;
+      width: auto;
+      height: auto;
+      border-radius: 20px;
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 0 50px rgba(30, 144, 255, 0.3);
+      object-fit: contain;
+      background: #0a0f1a;
+      transition: transform 0.3s ease;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      background: rgba(20, 30, 50, 0.7);
+      border: 1px solid var(--border-dim);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.4rem;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox-close:hover {
+      background: var(--electric-blue);
+      border-color: var(--electric-blue);
+      transform: rotate(90deg);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(20, 30, 50, 0.7);
+      border: 1px solid var(--border-dim);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .lightbox-nav:hover {
+      background: var(--electric-blue);
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 20px rgba(30, 144, 255, 0.5);
+    }
+
+    .lightbox-prev {
+      left: 20px;
+    }
+
+    .lightbox-next {
+      right: 20px;
+    }
+
+    @media (max-width: 700px) {
+      .lightbox-prev {
+        left: 8px;
+      }
+
+      .lightbox-next {
+        right: 8px;
+      }
+
+      .lightbox-close {
+        top: -40px;
+        right: 0;
+        width: 38px;
+        height: 38px;
+        font-size: 1.2rem;
+      }
+
+      .lightbox-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+
+    /* ----- CONTACT SECTION ----- */
+    .contact {
+      padding: 100px 0 120px;
+      background: linear-gradient(180deg, #070b12 0%, var(--bg-deep) 100%);
+      border-top: 1px solid rgba(30, 144, 255, 0.08);
+    }
+
+    .contact-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .contact-headline {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff, #b0d0ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 16px;
+    }
+
+    .contact-text {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+      max-width: 500px;
+    }
+
+    .contact-actions {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 44px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: var(--transition);
+      border: 1px solid var(--border-dim);
+      background: rgba(15, 22, 36, 0.7);
+      backdrop-filter: blur(8px);
+      color: white;
+      min-width: 200px;
+      justify-content: center;
+    }
+
+    .contact-btn i {
+      font-size: 1.3rem;
+      color: var(--electric-blue);
+      transition: var(--transition);
+    }
+
+    .contact-btn:hover {
+      border-color: var(--electric-blue);
+      box-shadow: 0 0 30px rgba(30, 144, 255, 0.3);
+      transform: translateY(-4px);
+      background: rgba(30, 144, 255, 0.1);
+    }
+
+    .contact-btn:hover i {
+      color: #ffffff;
+      text-shadow: 0 0 12px var(--electric-blue);
+    }
+
+    /* ----- FOOTER ----- */
+    .footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border-dim);
+      background: #04060a;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff, #9ac8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .footer-role {
+      color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    .footer-copy {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
+
+    /* ----- ANIMATIONS (fade-up) ----- */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1), transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* stagger for gallery */
+    .thumb-card.fade-up {
+      transition-delay: calc(0.05s * var(--i, 0));
+    }
+
+    /* ----- SCROLL PADDING FOR STICKY NAV ----- */
+    section[id] {
+      scroll-margin-top: 80px;
+    }
+
+    /* ----- MISC ----- */
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* For scroll performance */
+    .gallery-grid {
+      will-change: transform;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="navbar" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <div class="nav-brand">NEXTGEN PIYUSH</div>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <i class="fas fa-bars"></i>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section id="home" class="hero">
+    <div class="container hero-grid">
+      <div class="hero-content fade-up">
+        <div class="hero-logo-wrapper">
+          <img src="IMG_20260926_105007_424.jpg" alt="NEXTGEN PIYUSH logo" class="hero-logo" loading="eager">
+          <span class="hero-logo-label">Thumbnail Designer</span>
+        </div>
+        <h1 class="hero-headline">
+          Thumbnails That Make<br>People <span>Stop Scrolling.</span>
+        </h1>
+        <p class="hero-desc">
+          High-impact YouTube thumbnails designed to grab attention, create curiosity and increase clicks.
+        </p>
+        <div class="hero-ctas">
+          <a href="#work" class="btn btn-primary"><i class="fas fa-images"></i> View My Work</a>
+          <a href="#contact" class="btn btn-outline"><i class="fas fa-paper-plane"></i> Contact Me</a>
+        </div>
+      </div>
+      <div class="hero-visual fade-up">
+        <img src="IMG_20260926_105007_424.jpg" alt="NEXTGEN PIYUSH brand logo" class="hero-logo-large" loading="eager">
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PORTFOLIO / WORK ========== -->
+  <section id="work" class="portfolio">
+    <div class="container">
+      <div class="portfolio-header fade-up">
+        <h2 class="section-title">Selected Thumbnail Work</h2>
+        <p class="section-sub">
+          A collection of thumbnails designed to stand out, communicate instantly and earn the click.
+        </p>
+      </div>
+
+      <!-- GALLERY GRID - all images referenced exactly as provided -->
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- 1 -->
+        <div class="thumb-card fade-up" style="--i:0" data-index="0">
+          <img src="Picsart_26-04-23_00-38-42-838.jpg" alt="Thumbnail design 1" loading="lazy">
+        </div>
+        <!-- 2 -->
+        <div class="thumb-card fade-up" style="--i:1" data-index="1">
+          <img src="Picsart_26-04-30_00-53-48-761 (2).jpg" alt="Thumbnail design 2" loading="lazy">
+        </div>
+        <!-- 3 -->
+        <div class="thumb-card fade-up" style="--i:2" data-index="2">
+          <img src="Picsart_26-05-01_15-26-24-387.jpg" alt="Thumbnail design 3" loading="lazy">
+        </div>
+        <!-- 4 -->
+        <div class="thumb-card fade-up" style="--i:3" data-index="3">
+          <img src="Picsart_26-07-23_00-24-10-453.jpg" alt="Thumbnail design 4" loading="lazy">
+        </div>
+        <!-- 5 -->
+        <div class="thumb-card fade-up" style="--i:4" data-index="4">
+          <img src="Picsart_26-08-04_20-45-18-149.jpg" alt="Thumbnail design 5" loading="lazy">
+        </div>
+        <!-- 6 -->
+        <div class="thumb-card fade-up" style="--i:5" data-index="5">
+          <img src="Picsart_26-08-06_19-41-38-581.jpg" alt="Thumbnail design 6" loading="lazy">
+        </div>
+        <!-- 7 -->
+        <div class="thumb-card fade-up" style="--i:6" data-index="6">
+          <img src="Picsart_26-08-14_17-29-52-040.png" alt="Thumbnail design 7" loading="lazy">
+        </div>
+        <!-- 8 -->
+        <div class="thumb-card fade-up" style="--i:7" data-index="7">
+          <img src="Picsart_26-08-17_17-22-20-084.jpg" alt="Thumbnail design 8" loading="lazy">
+        </div>
+        <!-- 9 -->
+        <div class="thumb-card fade-up" style="--i:8" data-index="8">
+          <img src="Picsart_26-08-27_00-25-45-490 (1).jpg" alt="Thumbnail design 9" loading="lazy">
+        </div>
+        <!-- 10 -->
+        <div class="thumb-card fade-up" style="--i:9" data-index="9">
+          <img src="Picsart_26-08-30_14-12-49-643.jpg" alt="Thumbnail design 10" loading="lazy">
+        </div>
+        <!-- 11 -->
+        <div class="thumb-card fade-up" style="--i:10" data-index="10">
+          <img src="Picsart_26-09-09_20-11-25-425.jpg" alt="Thumbnail design 11" loading="lazy">
+        </div>
+        <!-- 12 -->
+        <div class="thumb-card fade-up" style="--i:11" data-index="11">
+          <img src="Picsart_26-09-20_23-28-31-684.jpg" alt="Thumbnail design 12" loading="lazy">
+        </div>
+        <!-- 13 -->
+        <div class="thumb-card fade-up" style="--i:12" data-index="12">
+          <img src="Picsart_26-09-23_17-26-30-178.jpg" alt="Thumbnail design 13" loading="lazy">
+        </div>
+        <!-- 14 -->
+        <div class="thumb-card fade-up" style="--i:13" data-index="13">
+          <img src="sketch1789384110494.jpeg" alt="Thumbnail design 14" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LIGHTBOX ========== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close"><i class="fas fa-times"></i></button>
+      <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image"><i class="fas fa-chevron-left"></i></button>
+      <img class="lightbox-img" id="lightboxImg" src="" alt="Enlarged thumbnail">
+      <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <!-- ========== CONTACT ========== -->
+  <section id="contact" class="contact">
+    <div class="container contact-inner">
+      <h2 class="contact-headline fade-up">Let's Create Something That Gets Clicked.</h2>
+      <p class="contact-text fade-up">
+        Have a video that needs a thumbnail? Let's work together.
+      </p>
+      <div class="contact-actions fade-up">
+        <a href="https://www.instagram.com/nextgen_piyush?stkn=MXVlN3Vzcm0wZDJibQ==" target="_blank" rel="noopener noreferrer" class="contact-btn">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="mailto:roypk5822@gmail.com" class="contact-btn">
+          <i class="fas fa-envelope"></i> Email
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">NEXTGEN PIYUSH</div>
+      <div class="footer-role">Thumbnail Designer</div>
+      <div class="footer-copy">© 2026 NEXTGEN PIYUSH. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+    (function() {
+      'use strict';
+
+      // ---------- MOBILE MENU ----------
+      const hamburger = document.getElementById('hamburger');
+      const navLinks = document.getElementById('navLinks');
+
+      hamburger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const expanded = this.getAttribute('aria-expanded') === 'true' ? false : true;
+        this.setAttribute('aria-expanded', expanded);
+        navLinks.classList.toggle('active');
+        // change icon
+        const icon = this.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        } else {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+
+      // Close menu when clicking a link
+      navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          navLinks.classList.remove('active');
+          hamburger.setAttribute('aria-expanded', 'false');
+          const icon = hamburger.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        });
+      });
+
+      // Close menu when clicking outside (optional)
+      document.addEventListener('click', (e) => {
+        if (navLinks.classList.contains('active') && !navLinks.contains(e.target) && e.target !== hamburger) {
+          navLinks.classList.remove('active');
+          hamburger.setAttribute('aria-expanded', 'false');
+          const icon = hamburger.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+      });
+
+      // ---------- SMOOTH SCROLL (already via CSS, but ensure offset for sticky nav is handled) ----------
+      // (CSS scroll-margin-top does the job)
+
+      // ---------- FADE-UP ON SCROLL (Intersection Observer) ----------
+      const fadeElements = document.querySelectorAll('.fade-up');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            // Optionally unobserve after visible to improve performance
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      fadeElements.forEach(el => observer.observe(el));
+
+      // ---------- LIGHTBOX ----------
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxClose = document.getElementById('lightboxClose');
+      const lightboxPrev = document.getElementById('lightboxPrev');
+      const lightboxNext = document.getElementById('lightboxNext');
+
+      // collect all thumbnail images (src and alt)
+      const thumbCards = document.querySelectorAll('.thumb-card');
+      const imageSources = [];
+      thumbCards.forEach((card, idx) => {
+        const img = card.querySelector('img');
+        if (img) {
+          imageSources.push({
+            src: img.getAttribute('src'),
+            alt: img.getAttribute('alt') || 'Thumbnail design'
+          });
+        }
+      });
+
+      let currentIndex = 0;
+      const totalImages = imageSources.length;
+
+      // open lightbox on thumbnail click
+      thumbCards.forEach((card, index) => {
+        card.addEventListener('click', () => {
+          if (imageSources[index]) {
+            currentIndex = index;
+            updateLightboxImage();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // prevent scrolling
+          }
+        });
+      });
+
+      function updateLightboxImage() {
+        const imgData = imageSources[currentIndex];
+        if (imgData) {
+          lightboxImg.src = imgData.src;
+          lightboxImg.alt = imgData.alt;
+        } else {
+          lightboxImg.src = '';
+        }
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      function nextImage() {
+        if (totalImages === 0) return;
+        currentIndex = (currentIndex + 1) % totalImages;
+        updateLightboxImage();
+      }
+
+      function prevImage() {
+        if (totalImages === 0) return;
+        currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+        updateLightboxImage();
+      }
+
+      // event listeners
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+      lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+
+      // close on click outside content
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+          closeLightbox();
+        }
+      });
+
+      // keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') {
+          closeLightbox();
+        } else if (e.key === 'ArrowRight') {
+          nextImage();
+        } else if (e.key === 'ArrowLeft') {
+          prevImage();
+        }
+      });
+
+      // ---------- NAVBAR SHADOW ON SCROLL (subtle) ----------
+      const navbar = document.querySelector('.navbar');
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 20) {
+          navbar.style.borderBottomColor = 'rgba(30, 144, 255, 0.3)';
+        } else {
+          navbar.style.borderBottomColor = 'rgba(30, 144, 255, 0.18)';
+        }
+      }, { passive: true });
+
+      // Preload adjacent images for smoother lightbox? Not necessary but can be nice.
+      // No extra heavy work.
+
+      // Ensure all fade-up elements that are already in view get visible on load
+      window.addEventListener('load', () => {
+        // If some elements are already visible (e.g., hero), force them to be visible quickly
+        document.querySelectorAll('.hero .fade-up').forEach(el => el.classList.add('visible'));
+        // But also observer will trigger; safe.
+      });
+
+    })();
+  </script>
+</body>
+</html>
