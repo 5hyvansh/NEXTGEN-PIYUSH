@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXTGEN PIYUSH · Thumbnail Designer</title>
+  <!-- Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300..700;1,14..32,300..700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ---------- RESET & BASE ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #030712;
+      --secondary: #071426;
+      --accent: #123a8a;
+      --accent-light: #2563eb;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --card-bg: rgba(10, 19, 34, 0.8);
+      --shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.9);
+      --radius: 24px;
+      --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: var(--primary);
+      background-image: radial-gradient(circle at 18% 22%, #0b2a55 0%, #061326 38%, #030712 78%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ---------- GLASS / CARDS ---------- */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 48px -16px rgba(59, 130, 246, 0.25);
+    }
+
+    /* ---------- NAVIGATION ---------- */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      background: rgba(5, 11, 20, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+      transition: background 0.3s ease;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 2rem;
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0;
+      height: 2px;
+      background: var(--accent-light);
+      transition: width 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      width: 26px;
+      height: 2px;
+      background: var(--text);
+      transition: 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      width: 100%;
+      background: rgba(5, 11, 20, 0.98);
+      backdrop-filter: blur(12px);
+      padding: 2rem 2rem 2.5rem;
+      gap: 1.5rem;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+    }
+
+    /* ---------- SECTIONS ---------- */
+    section {
+      padding: 5rem 0 6rem;
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+      position: relative;
+      display: inline-block;
+      color: #eee;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, #3b82f6, #1e3a8a);
+      border-radius: 8px;
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 640px;
+      margin-bottom: 3rem;
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-content {
+      animation: fadeUp 0.9s ease forwards;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.15);
+      padding: 0.3rem 1.2rem;
+      border-radius: 60px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-size: 4.2rem;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+      color: #f0f0f0;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #ffffff, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-title {
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      max-width: 460px;
+      color: var(--text-muted);
+      margin-bottom: 2.2rem;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: transparent;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--text);
+      transition: all 0.25s ease;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      border-color: #3b82f6;
+      color: #050b14;
+    }
+
+    .btn-primary:hover {
+      background: #60a5fa;
+      border-color: #60a5fa;
+      transform: scale(1.02);
+      box-shadow: 0 12px 24px -8px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-outline:hover {
+      background: rgba(59, 130, 246, 0.1);
+      border-color: #3b82f6;
+    }
+
+    .hero-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeUp 1s ease 0.2s both;
+    }
+
+    .hero-logo img {
+      max-width: 380px;
+      border-radius: 32px;
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(59, 130, 246, 0.2);
+      transition: transform 0.4s ease;
+      filter: grayscale(0.1) brightness(1.05);
+    }
+
+    .hero-logo img:hover {
+      transform: scale(1.02);
+      box-shadow: 0 30px 60px -20px rgba(59, 130, 246, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.4);
+    }
+
+    /* ---------- THUMBNAILS / PORTFOLIO GRID ---------- */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem;
+      margin-top: 1rem;
+    }
+
+    .portfolio-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(6px);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.4s ease;
+      cursor: pointer;
+      box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.7);
+    }
+
+    .portfolio-card:hover {
+      transform: scale(1.02) translateY(-8px);
+      box-shadow: 0 30px 60px -16px rgba(59, 130, 246, 0.25);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .portfolio-card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      filter: grayscale(0.2) contrast(1.05) brightness(0.95);
+    }
+
+    .portfolio-card:hover img {
+      transform: scale(1.04);
+      filter: grayscale(0) contrast(1.1) brightness(1);
+    }
+
+    .card-label {
+      padding: 1rem 1.2rem 1.2rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      background: rgba(5, 11, 20, 0.7);
+      backdrop-filter: blur(4px);
+      border-top: 1px solid rgba(59, 130, 246, 0.1);
+      color: #dbeafe;
+    }
+
+    .card-label span {
+      color: var(--text-muted);
+      font-weight: 300;
+      font-size: 0.8rem;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* ---------- CONTACT ---------- */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .contact-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-10px);
+      background: rgba(10, 19, 34, 0.95);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 28px 48px -18px rgba(59, 130, 246, 0.2);
+    }
+
+    .contact-card i {
+      font-size: 2.2rem;
+      color: #3b82f6;
+      margin-bottom: 0.3rem;
+      transition: transform 0.25s ease;
+    }
+
+    .contact-card:hover i {
+      transform: scale(1.1);
+      color: #60a5fa;
+    }
+
+    .contact-card h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-top: 0.3rem;
+      color: #e2e8f0;
+    }
+
+    .contact-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      word-break: break-word;
+    }
+
+    .contact-card .btn {
+      margin-top: 0.8rem;
+      padding: 0.5rem 1.6rem;
+      font-size: 0.85rem;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer {
+      border-top: 1px solid rgba(59, 130, 246, 0.15);
+      padding: 2rem 0;
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .footer p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-icons {
+      display: flex;
+      gap: 1.8rem;
+    }
+
+    .footer-icons a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .footer-icons a:hover {
+      color: #3b82f6;
+    }
+
+    .footer-icons i {
+      font-size: 1.2rem;
+      color: #3b82f6;
+    }
+
+    /* ---------- ANIMATIONS ---------- */
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(28px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .hero-desc {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .btn-group {
+        justify-content: center;
+      }
+      .hero-logo img {
+        max-width: 300px;
+      }
+      .section-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .section-title {
+        text-align: center;
+        display: block;
+      }
+      .section-sub {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .hero h1 {
+        font-size: 3rem;
+      }
+      .hero-title {
+        font-size: 1.4rem;
+      }
+      .container {
+        padding: 0 1.2rem;
+      }
+      .section-title {
+        font-size: 2.2rem;
+      }
+      .portfolio-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2.4rem;
+      }
+      .hero-logo img {
+        max-width: 220px;
+      }
+      .portfolio-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-inner {
+        padding: 0.6rem 1rem;
+      }
+    }
+
+    /* lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 11, 20, 0.96);
+      backdrop-filter: blur(10px);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      padding: 2rem;
+    }
+    .lightbox.open {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 24px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(59, 130, 246, 0.3);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      object-fit: contain;
+      filter: grayscale(0.05);
+    }
+    .lightbox .close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      font-size: 2.6rem;
+      cursor: pointer;
+      color: #fff;
+      opacity: 0.5;
+      transition: 0.2s;
+    }
+    .lightbox .close:hover {
+      opacity: 1;
+      transform: rotate(90deg);
+      color: #3b82f6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <span class="logo-text">NEXTGEN PIYUSH</span>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#thumbnails">Thumbnails</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <span class="close" id="closeLightbox">&times;</span>
+  <img id="lightboxImg" src="" alt="preview">
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">✦ visual identity</div>
+      <h1><span>Thumbnail</span> Designer</h1>
+      <div class="hero-title">Creative visuals · high impact</div>
+      <p class="hero-desc">I create high-impact thumbnails and creative visuals designed to make your content stand out.</p>
+      <div class="btn-group">
+        <a href="#thumbnails" class="btn btn-primary">View Thumbnails</a>
+        <a href="#contact" class="btn btn-outline">Contact</a>
+      </div>
+    </div>
+    <div class="hero-logo">
+      <img src="https://raw.githubusercontent.com/piyushroy-art/thumbnails/main/IMG_20260926_105007_424.jpg" alt="NEXTGEN PIYUSH logo" loading="lazy" onerror="this.src='https://placehold.co/600x600/0a1322/3b82f6?text=NEXTGEN+PIYUSH'">
+    </div>
+  </div>
+</section>
+
+<!-- THUMBNAILS SECTION (ONLY) -->
+<section id="thumbnails" class="container reveal">
+  <h2 class="section-title">Thumbnails</h2>
+  <p class="section-sub">High‑impact previews that stop the scroll and drive clicks.</p>
+  <div class="portfolio-grid" id="thumbnailGrid">
+    <!-- Populated by JavaScript -->
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="container reveal">
+  <h2 class="section-title">Let's Work Together</h2>
+  <p class="section-sub">Ready to elevate your content? Let’s collaborate on thumbnails and creative visuals.</p>
+  <div class="contact-grid">
+    <a href="https://www.instagram.com/nextgen_piyush?stkn=MXVlN3Vzcm0wZDJibQ==" target="_blank" rel="noopener" class="contact-card">
+      <i class="fab fa-instagram"></i>
+      <h4>Instagram</h4>
+      <p>@nextgen_piyush</p>
+      <span class="btn btn-outline" style="pointer-events: none;">Follow</span>
+    </a>
+    <a href="mailto:roypk5822@gmail.com" class="contact-card">
+      <i class="fas fa-envelope"></i>
+      <h4>Email</h4>
+      <p>roypk5822@gmail.com</p>
+      <span class="btn btn-outline" style="pointer-events: none;">Send</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="container footer">
+  <p>&copy; 2026 NEXTGEN PIYUSH · All rights reserved.</p>
+  <div class="footer-icons">
+    <a href="https://www.instagram.com/nextgen_piyush?stkn=MXVlN3Vzcm0wZDJibQ==" target="_blank" rel="noopener">
+      <i class="fab fa-instagram"></i> Instagram
+    </a>
+    <a href="mailto:roypk5822@gmail.com">
+      <i class="fas fa-envelope"></i> Email
+    </a>
+  </div>
+</footer>
+
+<script>
+  (function() {
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+      });
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const closeLightbox = document.getElementById('closeLightbox');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightboxFn() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    closeLightbox.addEventListener('click', closeLightboxFn);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightboxFn();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightboxFn();
+    });
+
+    // ---------- POPULATE THUMBNAILS ----------
+    const thumbnailFiles = [
+      "Picsart_26-04-23_00-38-42-838.jpg",
+      "Picsart_26-04-30_00-53-48-761 (2).jpg",
+      "Picsart_26-05-01_15-26-24-387.jpg",
+      "Picsart_26-07-23_00-24-10-453.jpg",
+      "Picsart_26-08-04_20-45-18-149.jpg",
+      "Picsart_26-08-06_19-41-38-581.jpg",
+      "Picsart_26-08-14_17-29-52-040.png",
+      "Picsart_26-08-17_17-22-20-084.jpg",
+      "Picsart_26-08-27_00-25-45-490 (1).jpg",
+      "Picsart_26-08-30_14-12-49-643.jpg",
+      "Picsart_26-09-09_20-11-25-425.jpg",
+      "Picsart_26-09-20_23-28-31-684.jpg",
+      "Picsart_26-09-23_17-26-30-178.jpg",
+      "sketch1789384110494.jpeg"
+    ];
+
+    const baseURL = "https://raw.githubusercontent.com/piyushroy-art/thumbnails/main/";
+    const grid = document.getElementById('thumbnailGrid');
+
+    thumbnailFiles.forEach((file, index) => {
+      const card = document.createElement('div');
+      card.className = 'portfolio-card';
+
+      // Use encoded URL for filenames with spaces / brackets
+      const encodedFile = encodeURIComponent(file).replace(/%2F/g, '/'); // preserve slashes if any
+      const fullURL = baseURL + encodedFile;
+
+      const img = document.createElement('img');
+      img.src = fullURL;
+      img.alt = `Thumbnail ${index + 1}`;
+      img.loading = 'lazy';
+      // fallback if image fails
+      img.onerror = function() {
+        this.src = 'https://placehold.co/640x360/0a1322/3b82f6?text=Thumbnail+' + (index+1);
+      };
+
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'card-label';
+      labelDiv.innerHTML = `Thumbnail design <span>click to preview</span>`;
+
+      card.appendChild(img);
+      card.appendChild(labelDiv);
+
+      // Click to open lightbox
+      card.addEventListener('click', () => {
+        openLightbox(fullURL);
+      });
+
+      grid.appendChild(card);
+    });
+
+  })();
+</script>
+</body>
+</html>
